@@ -4,8 +4,8 @@ import { GoPrimitiveDot } from 'react-icons/go';
 import { IoIosMore } from 'react-icons/io';
 import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
 
-import { Stacked, Pie, Button, LineChart, SparkLine } from '../components';
-import { earningData, medicalproBranding, recentTransactions, weeklyStats, dropdownData, SparklineAreaData, ecomPieChartData } from '../data/dummy';
+import { Button } from '../components';
+import { dropdownData } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
 import product9 from '../data/product9.jpg';
 
@@ -45,7 +45,7 @@ const Ecommerce = () => {
           </div>
         </div>
         <div className="flex m-3 flex-wrap justify-center gap-1 items-center">
-          {earningData.map((item) => (
+          {/* {earningData?.map((item) => (
             <div key={item.title} className="bg-white h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56  p-4 pt-9 rounded-2xl ">
               <button
                 type="button"
@@ -62,7 +62,7 @@ const Ecommerce = () => {
               </p>
               <p className="text-sm text-gray-400  mt-1">{item.title}</p>
             </div>
-          ))}
+          ))} */}
         </div>
       </div>
 
@@ -103,7 +103,7 @@ const Ecommerce = () => {
               </div>
 
               <div className="mt-5">
-                <SparkLine currentColor={currentColor} id="line-sparkLine" type="Line" height="80px" width="250px" data={SparklineAreaData} color={currentColor} />
+                {/* <SparkLine currentColor={currentColor} id="line-sparkLine" type="Line" height="80px" width="250px" data={SparklineAreaData} color={currentColor} /> */}
               </div>
               <div className="mt-10">
                 <Button
@@ -115,7 +115,7 @@ const Ecommerce = () => {
               </div>
             </div>
             <div>
-              <Stacked currentMode={currentMode} width="320px" height="360px" />
+              {/* <Stacked currentMode={currentMode} width="320px" height="360px" /> */}
             </div>
           </div>
         </div>
@@ -134,7 +134,7 @@ const Ecommerce = () => {
             </div>
 
             <div className="mt-4">
-              <SparkLine currentColor={currentColor} id="column-sparkLine" height="100px" type="Column" data={SparklineAreaData} width="320" color="rgb(242, 252, 253)" />
+              {/* <SparkLine currentColor={currentColor} id="column-sparkLine" height="100px" type="Column" data={SparklineAreaData} width="320" color="rgb(242, 252, 253)" /> */}
             </div>
           </div>
 
@@ -145,7 +145,7 @@ const Ecommerce = () => {
             </div>
 
             <div className="w-40">
-              <Pie id="pie-chart" data={ecomPieChartData} legendVisiblity={false} height="160px" />
+              {/* <Pie id="pie-chart" data={ecomPieChartData} legendVisiblity={false} height="160px" /> */}
             </div>
           </div>
         </div>
@@ -158,7 +158,7 @@ const Ecommerce = () => {
             <DropDown currentMode={currentMode} />
           </div>
           <div className="mt-10 w-72 md:w-400">
-            {recentTransactions.map((item) => (
+            {/* {recentTransactions?.map((item) => (
               <div key={item.title} className="flex justify-between mt-4">
                 <div className="flex gap-4">
                   <button
@@ -178,7 +178,7 @@ const Ecommerce = () => {
                 </div>
                 <p className={`text-${item.pcColor}`}>{item.amount}</p>
               </div>
-            ))}
+            ))} */}
           </div>
           <div className="flex justify-between items-center mt-5 border-t-1 border-color">
             <div className="mt-3">
@@ -199,7 +199,7 @@ const Ecommerce = () => {
             <DropDown currentMode={currentMode} />
           </div>
           <div className="md:w-full overflow-auto">
-            <LineChart />
+            {/* <LineChart /> */}
           </div>
         </div>
       </div>
@@ -214,7 +214,7 @@ const Ecommerce = () => {
           </div>
 
           <div className="mt-10 ">
-            {weeklyStats.map((item) => (
+            {/* {weeklyStats?.map((item) => (
               <div key={item.title} className="flex justify-between mt-4 w-full">
                 <div className="flex gap-4">
                   <button
@@ -232,9 +232,9 @@ const Ecommerce = () => {
 
                 <p className={`text-${item.pcColor}`}>{item.amount}</p>
               </div>
-            ))}
+            ))} */}
             <div className="mt-4">
-              <SparkLine currentColor={currentColor} id="area-sparkLine" height="160px" type="Area" data={SparklineAreaData} width="320" color="rgb(242, 252, 253)" />
+              {/* <SparkLine currentColor={currentColor} id="area-sparkLine" height="160px" type="Area" data={SparklineAreaData} width="320" color="rgb(242, 252, 253)" /> */}
             </div>
           </div>
 
@@ -251,18 +251,18 @@ const Ecommerce = () => {
           </p>
 
           <div className="flex gap-4 border-b-1 border-color mt-6">
-            {medicalproBranding.data.map((item) => (
+            {/* {medicalproBranding.data?.map((item) => (
               <div key={item.title} className="border-r-1 border-color pr-4 pb-2">
                 <p className="text-xs text-gray-400">{item.title}</p>
                 <p className="text-sm">{item.desc}</p>
               </div>
-            ))}
+            ))} */}
           </div>
           <div className="border-b-1 border-color pb-4 mt-2">
             <p className="text-md font-semibold mb-2">Teams</p>
 
             <div className="flex gap-4">
-              {medicalproBranding.teams.map((item) => (
+              {/* {medicalproBranding.teams?.map((item) => (
                 <p
                   key={item.name}
                   style={{ background: item.color }}
@@ -270,15 +270,15 @@ const Ecommerce = () => {
                 >
                   {item.name}
                 </p>
-              ))}
+              ))} */}
             </div>
           </div>
           <div className="mt-2">
             <p className="text-md font-semibold mb-2">Leaders</p>
             <div className="flex gap-4">
-              {medicalproBranding.leaders.map((item, index) => (
+              {/* {medicalproBranding.leaders?.map((item, index) => (
                 <img key={index} className="rounded-full w-8 h-8" src={item.image} alt="" />
-              ))}
+              ))} */}
             </div>
           </div>
           <div className="flex justify-between items-center mt-5 border-t-1 border-color">

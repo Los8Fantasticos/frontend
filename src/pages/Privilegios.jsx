@@ -4,17 +4,17 @@ import { GridComponent, ColumnsDirective, ColumnDirective, Page, Selection, Inje
 import { customersData, customersGrid } from '../data/dummy';
 import { Header } from '../components';
 
-const Customers = () => {
+const Privilegios = () => {
   const selectionsettings = { persistSelection: true };
-  const toolbarOptions = ['Delete'];
+  const toolbarOptions = ['Delete', 'Search', 'Edit', 'Update', 'Cancel' ];
   const editing = { allowDeleting: true, allowEditing: true };
 
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-      <Header category="Page" title="Usuarios" />
+      <Header category="Page" title="Privilegios" />
       <GridComponent
         dataSource={customersData}
-        enableHover={false}
+        enableHover={true}
         allowPaging
         pageSettings={{ pageCount: 5 }}
         selectionSettings={selectionsettings}
@@ -32,4 +32,4 @@ const Customers = () => {
   );
 };
 
-export default Customers;
+export default Privilegios;

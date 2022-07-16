@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 
 import './index.css';
 import App from './App';
-import { ContextProvider } from './contexts/ContextProvider';
+import Login from './pages/SignUpForm';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ContextProvider>
+    <Login>
       <App />
-    </ContextProvider>
+    </Login>
   </React.StrictMode>,
   document.getElementById('root'),
 );

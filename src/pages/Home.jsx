@@ -15,7 +15,7 @@ const DropDown = ({ currentMode }) => (
   </div>
 );
 
-const Home = () => {
+export function Home() {
   const { currentColor, currentMode } = useStateContext();
 
   return (
@@ -329,5 +329,3 @@ const Home = () => {
     </div>
   );
 };
-
-export default Home;

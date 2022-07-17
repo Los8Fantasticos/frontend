@@ -1,15 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import './index.css';
-import App from './App';
-import SignUpForm from './pages/SignUpForm';
+import {App} from './App';
+import { ContextProvider } from './contexts/ContextProvider';
 
 ReactDOM.render(
   <React.StrictMode>
-    <SignUpForm>
+    <ContextProvider>
       <App />
-    </SignUpForm>
+    </ContextProvider>
   </React.StrictMode>,
   document.getElementById('root'),
 );

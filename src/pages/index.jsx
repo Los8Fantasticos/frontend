@@ -1,5 +1,5 @@
 export { Home } from './Home';
-export { default as Privilegios } from './Privilegios';
+export { Privilegios } from './Privilegios';
 export { Usuarios } from './Usuarios';
 export { LoginForm } from './LoginForm';
 // export { RegisterForm } from './RegisterForm';

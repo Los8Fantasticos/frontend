@@ -52,13 +52,18 @@ const UserProfile = () => {
         ))}
       </div>
       <div className="mt-5">
-        <Button
-          color="white"
-          bgColor={currentColor}
-          text="Logout"
-          borderRadius="10px"
-          width="full"
-        />
+        <button 
+          type="button"
+          style={{ backgroundColor: currentColor }}
+          className="text-white text-xl rounded p-3 w-full"
+          onClick={() => {
+            localStorage.removeItem('token');
+            window.location.reload();
+            }
+          }
+          >
+            Logout
+        </button>
       </div>
     </div>
 

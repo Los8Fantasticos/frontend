@@ -1,5 +1,5 @@
 import {callApi} from "./services";
-const service = "/api/User";
+const service = "/UserManagement";
 
 export const userServices = {
     getAll,
@@ -11,7 +11,7 @@ export const userServices = {
  * 
  */
 async function getAll() {
-    return callApi(service, "GET");
+    return callApi(`${service}/Users`, "GET");
 }
 
 /**

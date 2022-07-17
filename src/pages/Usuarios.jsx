@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState, useEffect, Fragment, React} from "react";
 import { GridComponent, ColumnsDirective, ColumnDirective, Page, Selection, Inject, Edit, Toolbar, Sort, Filter } from '@syncfusion/ej2-react-grids';
 import { userServices } from '../services/userServices';
 import { customersData, customersGrid } from '../data/dummy';
@@ -10,17 +10,28 @@ export function Usuarios () {
   // const toolbarOptions = ['Add', 'Edit', 'Update', 'Delete', 'Cancel','Search'];
   const toolbarOptions = [{ text: 'Add', tooltipText: 'Add', prefixIcon: 'e-add', id: 'Add' }];
   const editing = { allowDeleting: true, allowEditing: true, allowPaging: true, allowSorting: true, allowAdding: true };
+  
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const getUsers = async () => {
-    debugger;
-    return await userServices.getUsers();
+  useEffect(() => {
+    getUsers();
+  }, [])
+
+  const getUsers =()=>{
+    userServices.getAll().then((users) => {
+      console.log(users);
+      setLoading(false);
+      setUsers(users);
+    });
   };
+
 
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
       <Header category="Page" title="Usuarios" />
       <GridComponent
-        dataSource={null}
+        dataSource={users}
         enableHover={false}
         allowPaging
         pageSettings={{ pageCount: 5 }}

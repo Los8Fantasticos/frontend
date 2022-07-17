@@ -1,4 +1,7 @@
-import React from 'react';
+import React,{Component} from 'react';
+import { MdAlternateEmail  } from 'react-icons/md';
+import { RiLockPasswordFill,RiPhoneFill  } from 'react-icons/ri';
+import{FaUserAlt} from 'react-icons/fa';
 
 
 const Login = () => {
@@ -10,30 +13,38 @@ const Login = () => {
                 <svg width={188} height={74} viewBox="0 0 188 74" fill="none" xmlns="http://www.w3.org/2000/svg">
 
                 </svg>
-                <div className="bg-white shadow rounded lg:w-1/3  md:w-1/2 w-full p-10 mt-16 ">
-                    <div className='mt-6 w-full'>
-                        <lable className="text-sm font-medium leading-none text-gray-800 ">Nombre</lable>
+            
+                <div className="bg-white shadow rounded lg:w-1/3  md:w-1/2 w-full p-10 mt-16 " >
+                    <div className='grid grid-cols-2 gap-4 place-items-start'>
+                        <div>
+                        <lable className="text-sm font-medium leading-none text-gray-800 inline-flex"><FaUserAlt/> Nombre</lable>
                         <input aria-label="enter name" role="input" type="text" className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
-                    </div>
-
-                    <div className='mt-6 w-full'>
-                        <lable className="text-sm font-medium leading-none text-gray-800 my-0.5">Apellido</lable>
+                        </div>
+                        <div>
+                        <lable className="text-sm font-medium leading-none text-gray-800 my-0.5 inline-flex">Apellido</lable>
                         <input aria-label="enter last name" role="input" type="text" className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2 my-0.5" />
+                        </div>
+                        
+                    </div>
+                
+                    <div className='mt-6 w-48'>
+                   
+
+                    </div>
+                
+                    <div className='mt-6 w-full'>
+                        <lable className="text-sm font-medium leading-none text-gray-800 inline-flex"><RiPhoneFill/>Teléfono</lable>
+                        <input aria-label="enter phone" role="input" type="text" className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
                     </div>
 
                     <div className='mt-6 w-full'>
                 
-                        <lable className="text-sm font-medium leading-none text-gray-800 my-0.5">Email/Usuario</lable>
+                        <lable className="text-sm font-medium leading-none text-gray-800 my-0.5 inline-flex"><MdAlternateEmail/> Email/Usuario</lable>
                         <input aria-label="enter email adress" role="input" type="email" className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
                     </div>
 
-                    <div className='mt-6 w-full'>
-                        <lable className="text-sm font-medium leading-none text-gray-800">Teléfono</lable>
-                        <input aria-label="enter phone" role="input" type="text" className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
-                    </div>
-
                     <div className="mt-6  w-full">
-                        <lable className="text-sm font-medium leading-none text-gray-800">Contraseña</lable>
+                        <lable className="text-sm font-medium leading-none text-gray-800 inline-flex"><RiLockPasswordFill/>Contraseña</lable>
                         <div className="relative flex items-center justify-center">
                             <input aria-label="enter Password" role="input" type="password" className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
                             <div className="absolute right-0 mt-2 mr-3 cursor-pointer">
@@ -47,7 +58,7 @@ const Login = () => {
                         </div>
                     </div>
                     <div className="mt-6  w-full">
-                        <lable className="text-sm font-medium leading-none text-gray-800">Confirmar Contraseña</lable>
+                        <lable className="text-sm font-medium leading-none text-gray-800 inline-flex"><RiLockPasswordFill/>Confirmar Contraseña</lable>
                         <div className="relative flex items-center justify-center">
                             <input aria-label="confirm Password" role="input" type="password" className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
                             <div className="absolute right-0 mt-2 mr-3 cursor-pointer">

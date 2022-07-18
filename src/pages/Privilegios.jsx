@@ -17,12 +17,13 @@ const obtenerPrivilegios = (state) => {
 }
 
 export function Privilegios() {
-  const [ShowPrivilegeDialog, setShowPrivilegeDialog] = useState(false);
-  const [showCreatePrivilegeDialog, setShowCreatePrivilegeDialog] = useState(false);
+  const [ShowPrivilegeDialog, setShowPrivilegeDialog] = React.useState(false);
+  const [showCreatePrivilegeDialog, setShowCreatePrivilegeDialog] = React.useState(false);
   const { currentColor } = useStateContext();
 
   const [privileges, setPrivileges] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [privilege, setPrivilege] = React.useState([]);
 
   React.useEffect(() => {
     userManagementServices.getAllPrivileges().then(data => {
@@ -34,7 +35,7 @@ export function Privilegios() {
     }
     );
   }, []);
-  
+
   const columns = [
     { field: "id", headerName: "ID", width: 300 },
     { field: "name", headerName: "Nombre", width: 200 },
@@ -72,6 +73,7 @@ export function Privilegios() {
           icon={<EditIcon />}
           onClick={() => {
             setShowPrivilegeDialog(true);
+            setPrivilege(params.row);
           }}
           label="Edit"
         />
@@ -81,7 +83,7 @@ export function Privilegios() {
 
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-      <EditarPrivilegioDialog show={ShowPrivilegeDialog} close={() => setShowPrivilegeDialog(false)} />
+      <EditarPrivilegioDialog show={ShowPrivilegeDialog} close={() => setShowPrivilegeDialog(false)} privilegio={privilege}/>
       <CrearPrivilegioDialog show={showCreatePrivilegeDialog} close={() => setShowCreatePrivilegeDialog(false)} />
       <Header category="Pagina" title="Privilegios" />
       <div className="m-2" >

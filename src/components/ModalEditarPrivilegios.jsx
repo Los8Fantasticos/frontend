@@ -9,8 +9,8 @@ import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 
-export default function EditarPrivilegioDialog({show, close}) {
-
+export default function EditarPrivilegioDialog({show, close, privilegio}) {
+  console.log(privilegio);
   return (
     <div>
       <Dialog open={show} onClose={close}>
@@ -32,6 +32,7 @@ export default function EditarPrivilegioDialog({show, close}) {
                   id="nombreActual"
                   label="Nombre Actual"
                   type="text"
+                  value={privilegio.name}
                   InputProps={{
                     readOnly: true
                   }}

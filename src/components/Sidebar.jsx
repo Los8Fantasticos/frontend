@@ -4,14 +4,15 @@ import { SiShopware } from 'react-icons/si';
 import { MdOutlineCancel } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
-import { links } from '../data/dummy';
+import { links, linksAdmin } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
 
 const Sidebar = () => {
   const { currentColor, activeMenu, setActiveMenu, screenSize } = useStateContext();
-  debugger;
-  let IsAdmin = JSON.parse(localStorage.getItem("rolename")) == "Administrador" ? true : false
-  const [isAdmin, setIsAdmin] = React.useState(IsAdmin);
+  if(!(localStorage.getItem("rolename") == null)){
+    let user = JSON.parse(localStorage.getItem("rolename"));
+    var IsAdmin = user == "Administrador" ? true : false;
+  }
 
   const handleCloseSideBar = () => {
     if (activeMenu !== undefined && screenSize <= 900) {
@@ -19,7 +20,7 @@ const Sidebar = () => {
     }
   };
 
-  const activeLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg  text-white  text-md m-2';
+  const activeLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg  text-white text-md m-2';
   const normalLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-md text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2';
 
   return (
@@ -43,7 +44,6 @@ const Sidebar = () => {
           </div>
           <div className="mt-10 ">
             {links.map((item) => (
-              !isAdmin &&
               <div key={item.title}>
                 <p className="text-gray-400 dark:text-gray-400 m-3 mt-4 uppercase">
                   {item.title}
@@ -64,6 +64,30 @@ const Sidebar = () => {
                 ))}
               </div>
             ))}
+            {linksAdmin.map((item) => {
+              if(IsAdmin)
+              return (
+                <div key={item.title}>
+                  <p className="text-gray-400 dark:text-gray-400 m-3 mt-4 uppercase">
+                    {item.title}
+                  </p>
+                  {item.links.map((link) => (
+                    <NavLink
+                      to={`/${link.name}`}
+                      key={link.name}
+                      onClick={handleCloseSideBar}
+                      style={({ isActive }) => ({
+                        backgroundColor: isActive ? currentColor : '',
+                      })}
+                      className={({ isActive }) => (isActive ? activeLink : normalLink)}
+                    >
+                      {link.icon}
+                      <span className="capitalize ">{link.name}</span>
+                    </NavLink>
+                  ))}
+                </div>
+              );})}
+            
           </div>
         </>
       )}

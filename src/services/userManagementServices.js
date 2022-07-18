@@ -8,9 +8,9 @@ export const userManagementServices = {
     deletePrivilege,
     getAllPrivileges,
     editPrivilege,
-    deleteUser,
     getUserPrivileges,
-    assignRolesToUser
+    assignRolesToUser,
+    createPrivilege
   };
 
 /**
@@ -54,14 +54,6 @@ async function editPrivilege(data) {
 }
 
 /**
- * Elimina logicamente un usuario
- * @param {*} data
- */
- async function deleteUser(data) {
-    return callApi(`${service}/DeleteUser`, "PUT", data);
-}
-
-/**
  * Obtiene privilegios de usuario
  * 
  */
@@ -77,3 +69,12 @@ async function editPrivilege(data) {
  async function assignRolesToUser(id, data) {
     return callApi(`${service}/AssignPrivilegesToUser/${id}`, "PUT", data);
 }
+
+/**
+ * Crea un privilegio
+ * @param {*} data
+ */
+ async function createPrivilege(data) {
+    return callApi(service, "POST", data);
+}
+

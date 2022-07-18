@@ -9,9 +9,9 @@ import EditarUsuarioDialog from '../components/ModalEditarUsuario';
 import Swal from 'sweetalert2';
 import CrearUsuarioDialog from '../components/ModalCrearUsuario';
 import { userManagementServices } from '../services/userManagementServices';
+import { userServices } from '../services/userServices';
 
 export function Usuarios() {
-  debugger;
   let rol = JSON.parse(localStorage.getItem("rolename"));
   if(!(rol === "Administrador")){
     Swal.fire({
@@ -20,7 +20,6 @@ export function Usuarios() {
       icon: 'error',
       confirmButtonText: 'Aceptar'
     }).then((result) => {
-      debugger;
       if(result.isConfirmed){
         let url = `${process.env.REACT_APP_WEB_URL}/Inicio`;
         window.location.assign(url);
@@ -96,7 +95,7 @@ export function Usuarios() {
               /* Read more about isConfirmed, isDenied below */
               if (result.isConfirmed) {
                 let id = ''+params.row.id;
-                userManagementServices.deleteUser(id).then(() => {
+                userServices.deleteUser(id).then(() => {
                   Swal.fire('Se desactivó el usuario correctamente!', '', 'success')
                   .then(() => {
                     window.location.reload();
@@ -123,8 +122,8 @@ export function Usuarios() {
 
     return (
       <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-        <EditarUsuarioDialog show={showUserDialog} close={() => setShowUserDialog(false)} usuario={user} onSave={()=> getUsers() }/>
-        <CrearUsuarioDialog show={showCreateUserDialog} close={() => setShowCreateUserDialog(false)}/>
+        <EditarUsuarioDialog show={showUserDialog} close={() => setShowUserDialog(false)} usuario={user} onSave={()=> getUsers()}/>
+        <CrearUsuarioDialog show={showCreateUserDialog} close={() => setShowCreateUserDialog(false)} onSave={()=> getUsers()}/>
         <Header category="Pagina" title="Usuarios" />
         <div className="m-2" >
           <button className="text-white text-xl rounded p-3 mb-4"

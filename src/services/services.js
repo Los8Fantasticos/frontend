@@ -8,7 +8,6 @@
 import { get } from "react-query";	
 
 export const callApi = async (url, method, body, headers) => {
-debugger;
 var user = JSON.parse(localStorage.getItem("user"));
 const options = {
     method: method,
@@ -88,7 +87,6 @@ else return response.blob();
 };
 
 const handleError = (error) => {
-debugger;
 console.log("error", error);
 if (error.message === "Failed to fetch")
     error.message = "El servicio no se encuentra disponible temporalmente";

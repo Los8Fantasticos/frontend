@@ -8,10 +8,9 @@ import { userManagementServices } from '../services/userManagementServices';
 import Swal from 'sweetalert2';
 import CrearPrivilegioDialog from '../components/ModalCrearPrivilegios';
 import EditarPrivilegioDialog from '../components/ModalEditarPrivilegios';
+import { onSave } from "@syncfusion/ej2/spreadsheet";
 
 export function Privilegios() {
-  debugger;
-  console.log(localStorage.getItem("rolename"));
   let rol = JSON.parse(localStorage.getItem("rolename"));
   if(!(rol === "Administrador")){
     Swal.fire({
@@ -20,7 +19,6 @@ export function Privilegios() {
       icon: 'error',
       confirmButtonText: 'Aceptar'
     }).then((result) => {
-      debugger;
       if(result.isConfirmed){
         let url = `${process.env.REACT_APP_WEB_URL}/Inicio`;
         window.location.assign(url);
@@ -56,7 +54,6 @@ export function Privilegios() {
     }, []);
 
     const columns = [
-      { field: "id", headerName: "ID", width: 300 },
       { field: "name", headerName: "Nombre", width: 200 },
       { field: "normalizedName", headerName: "Nombre Normalizado", width: 200 },
       { field: "actions",
@@ -103,7 +100,7 @@ export function Privilegios() {
     return (
       <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
         <EditarPrivilegioDialog show={ShowPrivilegeDialog} close={() => setShowPrivilegeDialog(false)} privilegio={privilege} onSave={()=> getPrivileges() }/>
-        <CrearPrivilegioDialog show={showCreatePrivilegeDialog} close={() => setShowCreatePrivilegeDialog(false)} />
+        <CrearPrivilegioDialog show={showCreatePrivilegeDialog} close={() => setShowCreatePrivilegeDialog(false)} onSave={()=> getPrivileges() } />
         <Header category="Pagina" title="Privilegios" />
         <div className="m-2" >
           <button className="text-white text-xl rounded p-3 mb-4"

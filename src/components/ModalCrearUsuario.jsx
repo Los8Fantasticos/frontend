@@ -289,7 +289,7 @@ export default function CrearUsuarioDialog({show, close, onSave}) {
             <Button onClick={close}>Cancelar</Button>
             <Button onClick={async () => {
               await createUser(left);
-              await onSave();
+              onSave();
               close();
               }}>Guardar</Button>
           </DialogActions>

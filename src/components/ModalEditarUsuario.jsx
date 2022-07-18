@@ -18,6 +18,7 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Checkbox from "@mui/material/Checkbox";
 import { userManagementServices } from "../services/userManagementServices";
+import { userServices } from "../services/userServices";
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -32,9 +33,12 @@ function union(a, b) {
 }
 
 export default function EditarUsuarioDialog({ show, close, usuario, onSave }) {
-
-  async function editUser(usuario, left) {
-    await userManagementServices.assignRolesToUser(usuario, left);
+  const [usuarioEditado, setUsuarioRegistrado] = React.useState({ FirstName: "", LastName: "", Email: "", PhoneNumber: "", id: "" });
+  usuarioEditado.id = usuario.id;
+  usuarioEditado.Email = usuario.email;
+  async function editarUser(usuario, left) {
+    await userServices.editUser(usuario);
+    await userManagementServices.assignRolesToUser(usuario.id, left);
   }
 
   const [checked, setChecked] = React.useState([]);
@@ -58,6 +62,10 @@ export default function EditarUsuarioDialog({ show, close, usuario, onSave }) {
       getPrivileges();
     }
   }, [show]);
+
+  const handleUserPropertyChange = (event) => {
+    setUsuarioRegistrado({...usuarioEditado, [event.target.name]: event.target.value});
+  }
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -181,16 +189,22 @@ export default function EditarUsuarioDialog({ show, close, usuario, onSave }) {
                   id="nombre"
                   label="Nombre"
                   type="text"
+                  defaultValue={usuario.firstName}
                   fullWidth
                   variant="filled"
+                  onChange={handleUserPropertyChange}
+                  name="FirstName"
                 />
                 {<Divider orientation="vertical" flexItem />}
                 <TextField
                   id="apellido"
                   label="Apellido"
                   type="text"
+                  defaultValue={usuario.lastName}
                   fullWidth
                   variant="filled"
+                  onChange={handleUserPropertyChange}
+                  name="LastName"
                 />
               </Stack>
             </div>
@@ -198,14 +212,17 @@ export default function EditarUsuarioDialog({ show, close, usuario, onSave }) {
               sx={{ mt: 2 }}
               label="Teléfono"
               type="text"
+              defaultValue={usuario.phoneNumber}
               fullWidth
               variant="filled"
+              onChange={handleUserPropertyChange}
+              name="PhoneNumber"
             />
             <TextField
               sx={{ mt: 2 }}
               label="Email"
               type="email"
-              value={usuario.email}
+              defaultValue={usuario.email}
               fullWidth
               InputProps={{
                 readOnly: true
@@ -260,7 +277,7 @@ export default function EditarUsuarioDialog({ show, close, usuario, onSave }) {
           <DialogActions>
             <Button onClick={close}>Cancelar</Button>
             <Button onClick={async () => {
-              await editUser(usuario.id, left);
+              await editarUser(usuarioEditado, left);
               onSave();
               close();
               }}>Guardar</Button>

@@ -8,8 +8,19 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import { userManagementServices } from "../services/userManagementServices";
 
-export default function CrearPrivilegioDialog({show, close}) {
+export default function CrearPrivilegioDialog({show, close, onSave}) {
+  
+  const [nombre, setNombre] = React.useState({ privilegeName: ""});
+
+  async function createPrivilege(data) {
+    await userManagementServices.createPrivilege(data);
+  }
+
+  const handlePrivilegePropertyChange = (event) => {
+    setNombre({...nombre, [event.target.name]: event.target.value});
+  }
 
   return (
     <div>
@@ -35,6 +46,8 @@ export default function CrearPrivilegioDialog({show, close}) {
                   type="text"
                   fullWidth
                   variant="filled"
+                  name="privilegeName"
+                  onChange={handlePrivilegePropertyChange}
                 />
               </Stack>
             </div>
@@ -42,7 +55,11 @@ export default function CrearPrivilegioDialog({show, close}) {
           <Divider></Divider>
           <DialogActions>
             <Button onClick={close}>Cancelar</Button>
-            <Button onClick={close}>Guardar</Button>
+            <Button onClick={async () => {
+              await createPrivilege(nombre);
+              onSave();
+              close();
+              }}>Guardar</Button>
           </DialogActions>
         </Box>
       </Dialog>

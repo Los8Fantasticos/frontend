@@ -1,10 +1,11 @@
 import {callApi} from "./services";
-const service = "/User";
+const service = "/Users";
 
-export const userManagementServices = {
+export const userServices = {
     getById,
     createUser,
     deleteUser,
+    editUser
   };
 
 /**
@@ -23,6 +24,18 @@ async function createUser(data) {
     return callApi(service, "POST", data);
 }
 
+/**
+ * Elimina logicamente a un usuario
+ * @param {*} data
+ */
 async function deleteUser(data) {
-    return callApi(service, "Delete", data);
+    return callApi(service, "DELETE", data);
+}
+
+/**
+ * Edita un usuario
+ * @param {*} data
+ */
+ async function editUser(data) {
+    return callApi(service, "PUT", data);
 }

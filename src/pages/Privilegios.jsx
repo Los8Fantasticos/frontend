@@ -4,68 +4,79 @@ import { Header } from '../components';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useStateContext } from '../contexts/ContextProvider';
-import { userServices } from '../services/userServices';
+import { userManagementServices } from '../services/userManagementServices';
+//import sweetalert2
+import Swal from 'sweetalert2';
 
 
 const columns = [
-  { field: "id", headerName: "ID", width: 70 },
-  { field: "firstName", headerName: "Nombre", width: 130 },
-  { field: "lastName", headerName: "Apellido", width: 130 },
-  {
-    field: "Email",
-    headerName: "Email",
-    type: "email",
-    width: 220
-  },
-  {
-    field: "phoneNumber",
-    headerName: "Teléfono",
-    type: "number",
-    width: 220
-  },
-  {
-    field: "fullName",
-    headerName: "Nombre Completo",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    width: 160,
-    valueGetter: (params) =>
-      `${params.row.firstName || ""} ${params.row.lastName || ""}`
-  },
+  { field: "id", headerName: "ID", width: 300 },
+  { field: "name", headerName: "Nombre", width: 200 },
+  { field: "normalizedName", headerName: "Nombre Normalizado", width: 200 },
   {
     field: "actions",
     headerName: "Accionces",
     type: "actions",
-    width: 100,
+    width: 200,
     getActions: (params) => [
       <GridActionsCellItem
         icon={<DeleteIcon />}
-        onClick={() => {}}
+        onClick={() => {
+          Swal.fire({
+            title: 'Estas seguro de eliminar el privilegio?',
+            showCancelButton: true,
+            confirmButtonText: 'Confirmar',
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+              let id = ''+params.row.id;
+              userManagementServices.deletePrivilege(id).then(() => {
+                Swal.fire('Se eliminó el privilegio correctamente!', '', 'success')
+                .then(() => {
+                  window.location.reload();
+                })
+            }).catch((result2) => {
+                Swal.fire(result2.detail, '', 'error')
+            })
+            } 
+          })
+        }}
         label="Delete"
       />,
       <GridActionsCellItem
         icon={<EditIcon />}
-        onClick={() => {}}
+        onClick={() => {
+          
+        }}
         label="Edit"
       />
     ]
   }
 ];
 
-const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35, add: "test" },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 }
-];
+const obtenerPrivilegios = (state) => {
+  return {
+    privileges: state.privileges
+  }
+}
 
 export function Privilegios() {
   const { currentColor } = useStateContext();
+
+  const [privileges, setPrivileges] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    userManagementServices.getAllPrivileges().then(data => {
+      setPrivileges(data);
+      setLoading(false);
+    }
+    ).catch((result) => {
+      window.location.assign(`${process.env.REACT_APP_WEB_URL}/Inicio`);
+    }
+    );
+  }, []);
+
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
       <Header category="Pagina" title="Privilegios" />
@@ -77,7 +88,7 @@ export function Privilegios() {
       </div>
         <div style={{ height: 650, width: "100%" }}>
           <DataGrid
-            rows={rows}
+            rows={privileges}
             columns={columns}
             pageSize={10}
             rowsPerPageOptions={[10]}

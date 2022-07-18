@@ -1,18 +1,23 @@
 import {callApi} from "./services";
-const service = "/User";
+const service = "/UserManagement";
 
 export const userManagementServices = {
-    getById,
+    getAllUsers,
     createUser,
-    deleteUser,
+    deletePrivilege,
+    getAllPrivileges,
   };
 
 /**
  * Obtiene todos los usuarios
  * 
  */
-async function getById() {
+async function getAllUsers() {
     return callApi(`${service}/Users`, "GET");
+}
+
+async function getAllPrivileges() {
+    return callApi(`${service}/Privileges`, "GET");
 }
 
 /**
@@ -23,6 +28,6 @@ async function createUser(data) {
     return callApi(service, "POST", data);
 }
 
-async function deleteUser(data) {
-    return callApi(service, "Delete", data);
+async function deletePrivilege(data) {
+    return callApi(service, "DELETE", data);
 }

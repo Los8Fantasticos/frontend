@@ -4,7 +4,7 @@ import { Header } from '../components';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useStateContext } from '../contexts/ContextProvider';
-import { userServices } from '../services/userServices';
+import { userManagementServices } from '../services/userManagementServices';
 
 
 const columns = [

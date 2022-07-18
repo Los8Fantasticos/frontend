@@ -9,13 +9,6 @@ import Swal from 'sweetalert2';
 import CrearPrivilegioDialog from '../components/ModalCrearPrivilegios';
 import EditarPrivilegioDialog from '../components/ModalEditarPrivilegios';
 
-
-const obtenerPrivilegios = (state) => {
-  return {
-    privileges: state.privileges
-  }
-}
-
 export function Privilegios() {
   const [ShowPrivilegeDialog, setShowPrivilegeDialog] = React.useState(false);
   const [showCreatePrivilegeDialog, setShowCreatePrivilegeDialog] = React.useState(false);
@@ -25,7 +18,7 @@ export function Privilegios() {
   const [loading, setLoading] = React.useState(true);
   const [privilege, setPrivilege] = React.useState([]);
 
-  React.useEffect(() => {
+  function getPrivileges() {
     userManagementServices.getAllPrivileges().then(data => {
       setPrivileges(data);
       setLoading(false);
@@ -34,6 +27,10 @@ export function Privilegios() {
       window.location.assign(`${process.env.REACT_APP_WEB_URL}/Inicio`);
     }
     );
+  };
+
+  React.useEffect(() => {
+    getPrivileges()
   }, []);
 
   const columns = [
@@ -41,7 +38,7 @@ export function Privilegios() {
     { field: "name", headerName: "Nombre", width: 200 },
     { field: "normalizedName", headerName: "Nombre Normalizado", width: 200 },
     { field: "actions",
-      headerName: "Accionces",
+      headerName: "Acciones",
       type: "actions",
       width: 200,
       getActions: (params) => [
@@ -83,7 +80,7 @@ export function Privilegios() {
 
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-      <EditarPrivilegioDialog show={ShowPrivilegeDialog} close={() => setShowPrivilegeDialog(false)} privilegio={privilege}/>
+      <EditarPrivilegioDialog show={ShowPrivilegeDialog} close={() => setShowPrivilegeDialog(false)} privilegio={privilege} onSave={()=> getPrivileges() }/>
       <CrearPrivilegioDialog show={showCreatePrivilegeDialog} close={() => setShowCreatePrivilegeDialog(false)} />
       <Header category="Pagina" title="Privilegios" />
       <div className="m-2" >

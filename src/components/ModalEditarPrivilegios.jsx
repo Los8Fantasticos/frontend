@@ -8,9 +8,17 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import { userManagementServices } from '../services/userManagementServices';
 
-export default function EditarPrivilegioDialog({show, close, privilegio}) {
-  console.log(privilegio);
+
+export default function EditarPrivilegioDialog({show, close, privilegio, onSave}) {
+  
+  async function editPrivileges(privilegio) {
+    const nuevoNombre = document.getElementById("nombreNuevo").value;
+    privilegio.PrivilegeNewName = nuevoNombre;
+    await userManagementServices.editPrivilege(privilegio);
+  }
+
   return (
     <div>
       <Dialog open={show} onClose={close}>
@@ -53,10 +61,15 @@ export default function EditarPrivilegioDialog({show, close, privilegio}) {
           <Divider></Divider>
           <DialogActions>
             <Button onClick={close}>Cancelar</Button>
-            <Button onClick={close}>Guardar</Button>
+            <Button onClick={async () => {
+              await editPrivileges(privilegio);
+              onSave(); //fijate explota aca, pero crea el usuario bien, no se si hacer un refresh nomas..
+              close();
+              }}>Guardar</Button>
           </DialogActions>
         </Box>
       </Dialog>
     </div>
   );
 }
+

@@ -6,45 +6,55 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useStateContext } from '../contexts/ContextProvider';
 import EditarUsuarioDialog from '../components/ModalEditarUsuario';
+import Swal from 'sweetalert2';
 import CrearUsuarioDialog from '../components/ModalCrearUsuario';
-
-const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35, add: "test" },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 }
-];
+import { userManagementServices } from '../services/userManagementServices';
 
 export function Usuarios() {
   const [showUserDialog, setShowUserDialog] = useState(false);
   const [showCreateUserDialog, setShowCreateUserDialog] = useState(false);
   const { currentColor } = useStateContext();
 
+  const [users, setUsers] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [user, setUser] = React.useState([]);
+
+
+  function getUsers() {
+    userManagementServices.getAllUsers().then(data => {
+      setUsers(data);
+      setLoading(false);
+    }
+    ).catch((result) => {
+      window.location.assign(`${process.env.REACT_APP_WEB_URL}/Inicio`);
+    }
+    );
+  }
+  
+  React.useEffect(() => {
+    getUsers()
+  }, []);
+  
+
   const columns = [
-    { field: "id", headerName: "ID", width: 140 },
-    { field: "firstName", headerName: "Nombre", width: 260 },
-    { field: "lastName", headerName: "Apellido", width: 260 },
     {
-      field: "Email",
-      headerName: "Email",
-      width: 440
+      field: "email",
+      headerName: "Usuario",
+      width: 140
     },
+    { field: "firstName", headerName: "Nombre", width: 140 },
+    { field: "lastName", headerName: "Apellido", width: 140 },
     {
       field: "phoneNumber",
       headerName: "Teléfono",
-      width: 440
+      width: 140
     },
     {
       field: "fullName",
       headerName: "Nombre Completo",
       description: "This column has a value getter and is not sortable.",
       sortable: false,
-      width: 320,
+      width: 220,
       valueGetter: (params) =>
         `${params.row.firstName || ""} ${params.row.lastName || ""}`
     },
@@ -56,13 +66,32 @@ export function Usuarios() {
       getActions: (params) => [
         <GridActionsCellItem
           icon={<DeleteIcon />}
-          onClick={() => {}}
-          label="Delete"
-        />,
+          onClick={() => {Swal.fire({
+            title: 'Estas seguro de eliminar el usuario?',
+            showCancelButton: true,
+            confirmButtonText: 'Confirmar',
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+              let id = ''+params.row.id;
+              userManagementServices.deleteUser(id).then(() => {
+                Swal.fire('Se desactivó el usuario correctamente!', '', 'success')
+                .then(() => {
+                  window.location.reload();
+                })
+            }).catch((result2) => {
+                Swal.fire(result2.detail, '', 'error')
+            })
+            } 
+          })
+        }}
+        label="Delete"
+      />,
         <GridActionsCellItem
           icon={<EditIcon />}
           onClick={() => {
             setShowUserDialog(true);
+            setUser(params.row);
           }}
           label="Edit"
         />
@@ -72,7 +101,7 @@ export function Usuarios() {
 
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-      <EditarUsuarioDialog show={showUserDialog} close={() => setShowUserDialog(false)}/>
+      <EditarUsuarioDialog show={showUserDialog} close={() => setShowUserDialog(false)} usuario={user} onSave={()=> getUsers() }/>
       <CrearUsuarioDialog show={showCreateUserDialog} close={() => setShowCreateUserDialog(false)}/>
       <Header category="Pagina" title="Usuarios" />
       <div className="m-2" >
@@ -84,7 +113,7 @@ export function Usuarios() {
       </div>
         <div style={{ height: 650, width: "100%" }}>
           <DataGrid
-            rows={rows}
+            rows={users}
             columns={columns}
             pageSize={10}
             rowsPerPageOptions={[10]}

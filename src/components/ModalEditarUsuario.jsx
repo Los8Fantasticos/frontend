@@ -17,8 +17,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Checkbox from "@mui/material/Checkbox";
-
-
+import { userManagementServices } from "../services/userManagementServices";
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -32,11 +31,33 @@ function union(a, b) {
   return [...a, ...not(b, a)];
 }
 
-export default function EditarUsuarioDialog({show, close}) {
-  
+export default function EditarUsuarioDialog({ show, close, usuario, onSave }) {
+
+  async function editUser(usuario, left) {
+    await userManagementServices.assignRolesToUser(usuario, left);
+  }
+
   const [checked, setChecked] = React.useState([]);
-  const [left, setLeft] = React.useState([0, 1, 2, 3]);
-  const [right, setRight] = React.useState([4, 5, 6, 7]);
+  const [left, setLeft] = React.useState([]);
+  const [right, setRight] = React.useState([]);
+
+  async function getPrivileges() {
+    try {
+      const privileges = await userManagementServices.getAllPrivileges();
+      const userPrivileges = await userManagementServices.getUserPrivileges(usuario.id);
+      setLeft(userPrivileges);
+      setRight(privileges.map(privilege => privilege.name).filter(privilege => !userPrivileges.includes(privilege)))
+    }
+    catch (error) {
+      window.location.assign(`${process.env.REACT_APP_WEB_URL}/Inicio`);
+    }
+  };
+
+  React.useEffect(() => {
+    if (show) {
+      getPrivileges();
+    }
+  }, [show]);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -130,7 +151,7 @@ export default function EditarUsuarioDialog({show, close}) {
                   }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={`List item ${value + 1}`} />
+              <ListItemText id={labelId} primary={value} />
             </ListItem>
           );
         })}
@@ -138,7 +159,7 @@ export default function EditarUsuarioDialog({show, close}) {
       </List>
     </Card>
   );
-
+ 
   return (
     <div>
       <Dialog open={show} onClose={close}>
@@ -184,6 +205,7 @@ export default function EditarUsuarioDialog({show, close}) {
               sx={{ mt: 2 }}
               label="Email"
               type="email"
+              value={usuario.email}
               fullWidth
               InputProps={{
                 readOnly: true
@@ -204,7 +226,7 @@ export default function EditarUsuarioDialog({show, close}) {
                   justifyContent="center"
                   alignItems="center"
                 >
-                  <Grid item>{customList("Choices", left)}</Grid>
+                  <Grid item>{customList("Roles del usuario", left)}</Grid>
                   <Grid item>
                     <Grid container direction="column" alignItems="center">
                       <Button
@@ -229,7 +251,7 @@ export default function EditarUsuarioDialog({show, close}) {
                       </Button>
                     </Grid>
                   </Grid>
-                  <Grid item>{customList("Chosen", right)}</Grid>
+                  <Grid item>{customList("Roles disponibles", right)}</Grid>
                 </Grid>
               </div>
             </div>
@@ -237,7 +259,11 @@ export default function EditarUsuarioDialog({show, close}) {
           <Divider></Divider>
           <DialogActions>
             <Button onClick={close}>Cancelar</Button>
-            <Button onClick={close}>Guardar</Button>
+            <Button onClick={async () => {
+              await editUser(usuario.id, left);
+              onSave();
+              close();
+              }}>Guardar</Button>
           </DialogActions>
         </Box>
       </Dialog>

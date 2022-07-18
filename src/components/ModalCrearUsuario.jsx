@@ -17,6 +17,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Checkbox from "@mui/material/Checkbox";
+import { userManagementServices } from "../services/userManagementServices";
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -30,14 +31,42 @@ function union(a, b) {
   return [...a, ...not(b, a)];
 }
 
-export default function CrearUsuarioDialog({show, close}) {
+export default function CrearUsuarioDialog({show, close, onSave}) {
+  const [usuarioRegistrado, setUsuarioRegistrado] = React.useState({ FirstName: "", LastName: "", Email: "", Password: "", ConfirmPassword: "", PhoneNumber: "", id: "" });
+
+  async function createUser(left) {
+    let result = await userManagementServices.createUser(usuarioRegistrado);
+    usuarioRegistrado.id = result;
+    await userManagementServices.assignRolesToUser(usuarioRegistrado.id, left);
+  }
 
   const [checked, setChecked] = React.useState([]);
-  const [left, setLeft] = React.useState([0, 1, 2, 3]);
-  const [right, setRight] = React.useState([4, 5, 6, 7]);
+  const [left, setLeft] = React.useState([]);
+  const [right, setRight] = React.useState([]);
+
+  async function getPrivileges() {
+    try {
+      const privileges = await userManagementServices.getAllPrivileges();
+      setRight(privileges.map(privilege => privilege.name));
+    }
+    catch (error) {
+      window.location.assign(`${process.env.REACT_APP_WEB_URL}/Inicio`);
+    }
+  };
+
+  React.useEffect(() => {
+    if (show) {
+      getPrivileges();
+    }
+  }, [show]);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
+
+  const handleUserPropertyChange = (event) => {
+    setUsuarioRegistrado({...usuarioRegistrado, [event.target.name]: event.target.value});
+  }
+
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -128,7 +157,7 @@ export default function CrearUsuarioDialog({show, close}) {
                   }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={`List item ${value + 1}`} />
+              <ListItemText id={labelId} primary={value} />
             </ListItem>
           );
         })}
@@ -160,6 +189,8 @@ export default function CrearUsuarioDialog({show, close}) {
                   type="text"
                   fullWidth
                   variant="filled"
+                  onChange={handleUserPropertyChange}
+                  name="FirstName"
                 />
                 {<Divider orientation="vertical" flexItem />}
                 <TextField
@@ -168,6 +199,8 @@ export default function CrearUsuarioDialog({show, close}) {
                   type="text"
                   fullWidth
                   variant="filled"
+                  onChange={handleUserPropertyChange}
+                  name="LastName"
                 />
               </Stack>
             </div>
@@ -177,6 +210,8 @@ export default function CrearUsuarioDialog({show, close}) {
               type="text"
               fullWidth
               variant="filled"
+              onChange={handleUserPropertyChange}
+              name="PhoneNumber"
             />
             <TextField
               sx={{ mt: 2 }}
@@ -184,6 +219,26 @@ export default function CrearUsuarioDialog({show, close}) {
               type="email"
               fullWidth
               variant="filled"
+              onChange={handleUserPropertyChange}
+              name="Email"
+            />
+            <TextField
+              sx={{ mt: 2 }}
+              label="Contraseña"
+              type="password"
+              fullWidth
+              variant="filled"
+              onChange={handleUserPropertyChange}
+              name="Password"
+            />
+            <TextField
+              sx={{ mt: 2 }}
+              label="Repetir Contraseña"
+              type="password"
+              fullWidth
+              variant="filled"
+              onChange={handleUserPropertyChange}
+              name="ConfirmPassword"
             />
           </DialogContent>
           <Divider></Divider>
@@ -199,7 +254,7 @@ export default function CrearUsuarioDialog({show, close}) {
                   justifyContent="center"
                   alignItems="center"
                 >
-                  <Grid item>{customList("Choices", left)}</Grid>
+                  <Grid item>{customList("Roles del usuario", left)}</Grid>
                   <Grid item>
                     <Grid container direction="column" alignItems="center">
                       <Button
@@ -224,7 +279,7 @@ export default function CrearUsuarioDialog({show, close}) {
                       </Button>
                     </Grid>
                   </Grid>
-                  <Grid item>{customList("Chosen", right)}</Grid>
+                  <Grid item>{customList("Roles disponibles", right)}</Grid>
                 </Grid>
               </div>
             </div>
@@ -232,7 +287,11 @@ export default function CrearUsuarioDialog({show, close}) {
           <Divider></Divider>
           <DialogActions>
             <Button onClick={close}>Cancelar</Button>
-            <Button onClick={close}>Guardar</Button>
+            <Button onClick={async () => {
+              await createUser(left);
+              await onSave();
+              close();
+              }}>Guardar</Button>
           </DialogActions>
         </Box>
       </Dialog>

@@ -58,6 +58,7 @@ const UserProfile = () => {
           className="text-white text-xl rounded p-3 w-full"
           onClick={() => {
             localStorage.removeItem('token');
+            localStorage.removeItem('user');
             window.location.reload();
             }
           }

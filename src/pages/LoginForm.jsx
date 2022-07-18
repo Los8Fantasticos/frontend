@@ -1,8 +1,57 @@
 import React from 'react';
+import { useHistory } from "react-router-dom";
+import {useForm} from "react-hook-form";
+import {regEx} from "../config";
+import { loginService } from '../services/loginServices';
+import {SpinnerButton} from "../components/SpinnerButton";
+import Swal from 'sweetalert2';
+//import { ErrorForm } from "../components/ErrorForm";
 
-export function LoginForm (){
+export function LoginForm (props){
+    const history = useHistory();
+    const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState("");
+    const {register, handleSubmit, errors} = useForm();
+
+    React.useEffect(() => {
+        let user = JSON.parse(localStorage.getItem("user"));
+        if (user) {
+          history.push("/Inicio");
+        }
+      }, []);
+
+    const onSubmit = (data) => {
+        setLoading(true);
+        loginService.login(data)
+          .then(
+            (user) => {
+              localStorage.setItem("user", JSON.stringify(user));
+              localStorage.setItem("rolename", JSON.stringify(user.data.roleName));
+              if (!props.step) {
+                history.push("/Inicio");
+              } else {
+                setLoading(false);
+                props.authLogin(true);
+              }
+            })
+          .catch((error) => {
+            console.log("error", error);
+            Swal.fire(error.message, '', 'error');
+            setLoading(false);
+            setTimeout(() => setError(""), 5000);
+          });
+      };
+
     return (
         <div className="h-full bg-gradient-to-tl from-green-400 to-indigo-900 w-full py-16 px-4">
+            {loading &&
+                <div className="text-center">
+                    <SpinnerButton className="text-info"/>
+                </div>
+            }
+            {error &&
+                <div className="alert alert-danger mt-4" role="alert">{error}</div>
+            }
             <div className="flex flex-col items-center justify-center">
                 {/* imagen */}
                 <svg width={188} height={74} viewBox="0 0 188 74" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -52,13 +101,16 @@ export function LoginForm (){
                         <hr className="w-full bg-gray-400  " />
                     </div>
                     <div>
-                        <lable className="text-sm font-medium leading-none text-gray-800">Email</lable>
-                        <input aria-label="introducir email" role="input" type="email" className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
+                        <label className="text-sm font-medium leading-none text-gray-800">Email</label>
+                        <input aria-label="introducir email" role="input" name='username' type="email" className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" 
+                        {...register('username',{required: true, pattern: regEx.mail})}/>
+                        
                     </div>
                     <div className="mt-6  w-full">
-                        <lable className="text-sm font-medium leading-none text-gray-800">Contraseña</lable>
+                        <label className="text-sm font-medium leading-none text-gray-800">Contraseña</label>
                         <div className="relative flex items-center justify-center">
-                            <input aria-label="introducir Contraseña" role="input" type="password" className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
+                            <input aria-label="introducir Contraseña" role="input" type="password" className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" {...register('password',{required: true})} />
+                            
                             <div className="absolute right-0 mt-2 mr-3 cursor-pointer">
                                 <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -70,7 +122,7 @@ export function LoginForm (){
                         </div>
                     </div>
                     <div className="mt-8">
-                        <button role="button" aria-label="Iniciar sesión" className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold leading-none text-white focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-4 w-full">
+                        <button role="button" onClick={handleSubmit(onSubmit)} aria-label="Iniciar sesión" className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold leading-none text-white focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-4 w-full">
                             Iniciar sesión
                         </button>
                     </div>

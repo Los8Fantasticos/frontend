@@ -1,12 +1,10 @@
-callApi('/Auth/Login', 'POST', params).then((result) => {
-    if (result.responseCode === '00') {
-        console.log(result);
-    }
-    else {
-        console.log('error',params);
-    }
+import {callApi} from "./services";
+const service = "/Auth";
+
+export const loginService = {
+    login,
+  };
+
+  async function login(data) {
+    return callApi(`${service}/Login`, "POST", data);
 }
-).catch((error) => {
-    console.log('error', error);
-}
-);

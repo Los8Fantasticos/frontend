@@ -9,6 +9,9 @@ import { useStateContext } from '../contexts/ContextProvider';
 
 const Sidebar = () => {
   const { currentColor, activeMenu, setActiveMenu, screenSize } = useStateContext();
+  debugger;
+  let IsAdmin = JSON.parse(localStorage.getItem("rolename")) == "Administrador" ? true : false
+  const [isAdmin, setIsAdmin] = React.useState(IsAdmin);
 
   const handleCloseSideBar = () => {
     if (activeMenu !== undefined && screenSize <= 900) {
@@ -40,6 +43,7 @@ const Sidebar = () => {
           </div>
           <div className="mt-10 ">
             {links.map((item) => (
+              !isAdmin &&
               <div key={item.title}>
                 <p className="text-gray-400 dark:text-gray-400 m-3 mt-4 uppercase">
                   {item.title}

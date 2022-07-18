@@ -10,94 +10,117 @@ import CrearPrivilegioDialog from '../components/ModalCrearPrivilegios';
 import EditarPrivilegioDialog from '../components/ModalEditarPrivilegios';
 
 export function Privilegios() {
-  const [ShowPrivilegeDialog, setShowPrivilegeDialog] = React.useState(false);
-  const [showCreatePrivilegeDialog, setShowCreatePrivilegeDialog] = React.useState(false);
-  const { currentColor } = useStateContext();
+  debugger;
+  console.log(localStorage.getItem("rolename"));
+  let rol = JSON.parse(localStorage.getItem("rolename"));
+  if(!(rol === "Administrador")){
+    Swal.fire({
+      title: '¡No tienes permiso para acceder a esta página!',
+      text: 'Por favor, contacta con el administrador.',
+      icon: 'error',
+      confirmButtonText: 'Aceptar'
+    }).then((result) => {
+      debugger;
+      if(result.isConfirmed){
+        let url = `${process.env.REACT_APP_WEB_URL}/Inicio`;
+        window.location.assign(url);
+      }
+      else if(result.isDismissed){
+        let url = `${process.env.REACT_APP_WEB_URL}/Inicio`;
+        window.location.assign(url);
+      }
+    });
+  }
+  else{
+    const [ShowPrivilegeDialog, setShowPrivilegeDialog] = React.useState(false);
+    const [showCreatePrivilegeDialog, setShowCreatePrivilegeDialog] = React.useState(false);
+    const { currentColor } = useStateContext();
 
-  const [privileges, setPrivileges] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-  const [privilege, setPrivilege] = React.useState([]);
+    const [privileges, setPrivileges] = React.useState([]);
+    const [loading, setLoading] = React.useState(true);
+    const [privilege, setPrivilege] = React.useState([]);
 
-  function getPrivileges() {
-    userManagementServices.getAllPrivileges().then(data => {
-      setPrivileges(data);
-      setLoading(false);
-    }
-    ).catch((result) => {
-      window.location.assign(`${process.env.REACT_APP_WEB_URL}/Inicio`);
-    }
-    );
-  };
+    function getPrivileges() {
+      userManagementServices.getAllPrivileges().then(data => {
+        setPrivileges(data);
+        setLoading(false);
+      }
+      ).catch((result) => {
+        window.location.assign(`${process.env.REACT_APP_WEB_URL}/Inicio`);
+      }
+      );
+    };
 
-  React.useEffect(() => {
-    getPrivileges()
-  }, []);
+    React.useEffect(() => {
+      getPrivileges()
+    }, []);
 
-  const columns = [
-    { field: "id", headerName: "ID", width: 300 },
-    { field: "name", headerName: "Nombre", width: 200 },
-    { field: "normalizedName", headerName: "Nombre Normalizado", width: 200 },
-    { field: "actions",
-      headerName: "Acciones",
-      type: "actions",
-      width: 200,
-      getActions: (params) => [
-        <GridActionsCellItem
-          icon={<DeleteIcon />}
-          onClick={() => {
-            Swal.fire({
-              title: 'Estas seguro de eliminar el privilegio?',
-              showCancelButton: true,
-              confirmButtonText: 'Confirmar',
-            }).then((result) => {
-              /* Read more about isConfirmed, isDenied below */
-              if (result.isConfirmed) {
-                let id = ''+params.row.id;
-                userManagementServices.deletePrivilege(id).then(() => {
-                  Swal.fire('Se eliminó el privilegio correctamente!', '', 'success')
-                  .then(() => {
-                    window.location.reload();
-                  })
-              }).catch((result2) => {
-                  Swal.fire(result2.detail, '', 'error')
+    const columns = [
+      { field: "id", headerName: "ID", width: 300 },
+      { field: "name", headerName: "Nombre", width: 200 },
+      { field: "normalizedName", headerName: "Nombre Normalizado", width: 200 },
+      { field: "actions",
+        headerName: "Acciones",
+        type: "actions",
+        width: 200,
+        getActions: (params) => [
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            onClick={() => {
+              Swal.fire({
+                title: 'Estas seguro de eliminar el privilegio?',
+                showCancelButton: true,
+                confirmButtonText: 'Confirmar',
+              }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                  let id = ''+params.row.id;
+                  userManagementServices.deletePrivilege(id).then(() => {
+                    Swal.fire('Se eliminó el privilegio correctamente!', '', 'success')
+                    .then(() => {
+                      window.location.reload();
+                    })
+                }).catch((result2) => {
+                    Swal.fire(result2.detail, '', 'error')
+                })
+                } 
               })
-              } 
-            })
-          }}
-          label="Delete"
-        />,
-        <GridActionsCellItem
-          icon={<EditIcon />}
-          onClick={() => {
-            setShowPrivilegeDialog(true);
-            setPrivilege(params.row);
-          }}
-          label="Edit"
-        />
-      ]
-    }
-  ];
-
-  return (
-    <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-      <EditarPrivilegioDialog show={ShowPrivilegeDialog} close={() => setShowPrivilegeDialog(false)} privilegio={privilege} onSave={()=> getPrivileges() }/>
-      <CrearPrivilegioDialog show={showCreatePrivilegeDialog} close={() => setShowCreatePrivilegeDialog(false)} />
-      <Header category="Pagina" title="Privilegios" />
-      <div className="m-2" >
-        <button className="text-white text-xl rounded p-3 mb-4"
-        style={{ backgroundColor: currentColor }}
-        onClick={() => setShowCreatePrivilegeDialog(true)}>
-          Crear Privilegio
-        </button>
-      </div>
-        <div style={{ height: 650, width: "100%" }}>
-          <DataGrid
-            rows={privileges}
-            columns={columns}
-            pageSize={10}
-            rowsPerPageOptions={[10]}
+            }}
+            label="Delete"
+          />,
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            onClick={() => {
+              setShowPrivilegeDialog(true);
+              setPrivilege(params.row);
+            }}
+            label="Edit"
           />
+        ]
+      }
+    ];
+
+    return (
+      <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
+        <EditarPrivilegioDialog show={ShowPrivilegeDialog} close={() => setShowPrivilegeDialog(false)} privilegio={privilege} onSave={()=> getPrivileges() }/>
+        <CrearPrivilegioDialog show={showCreatePrivilegeDialog} close={() => setShowCreatePrivilegeDialog(false)} />
+        <Header category="Pagina" title="Privilegios" />
+        <div className="m-2" >
+          <button className="text-white text-xl rounded p-3 mb-4"
+          style={{ backgroundColor: currentColor }}
+          onClick={() => setShowCreatePrivilegeDialog(true)}>
+            Crear Privilegio
+          </button>
         </div>
-    </div>
-  );
+          <div style={{ height: 650, width: "100%" }}>
+            <DataGrid
+              rows={privileges}
+              columns={columns}
+              pageSize={10}
+              rowsPerPageOptions={[10]}
+            />
+          </div>
+      </div>
+    );     
+  }
 }

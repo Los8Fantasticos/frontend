@@ -13,6 +13,7 @@ export function App () {
         <AppRoute path="/Usuarios" component={Pages.Usuarios} layout={LayoutFull}/>
         <AppRoute path="/Privilegios" component={Pages.Privilegios} layout={LayoutFull} />
         <AppRoute path="/Inicio" component={Pages.Home} layout={LayoutFull} />
+        <AppRoute path="/SignUpForm" component={Pages.SignUpForm} layout={LayoutLess} />
         {/* Rutas privadas del sitio */}
         {/* <PrivateRoute exact path="/Dashboard" component={Pages.Dashboard} layout={LayoutFull} />
         <PrivateRoute path="/Usuarios" component={Pages.Usuarios} layout={LayoutFull}/>

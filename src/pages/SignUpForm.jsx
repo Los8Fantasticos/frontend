@@ -4,7 +4,7 @@ import { RiLockPasswordFill,RiPhoneFill  } from 'react-icons/ri';
 import{FaUserAlt} from 'react-icons/fa';
 
 
-const Login = () => {
+export function SignUpForm() {
 
     return (
         <div className="h-full bg-gradient-to-tl from-green-400 to-indigo-900 w-full py-16 px-4">
@@ -81,5 +81,3 @@ const Login = () => {
         </div>
     );
 }
-
-export default Login;

@@ -63,10 +63,10 @@ export function LoginForm (props){
                     </p>
                     <p className="text-sm mt-4 font-medium leading-none text-gray-500">
                         No tenes una cuenta?{" "}
-                        <span tabIndex={0} role="link" aria-label="Registrate acá" className="text-sm font-medium leading-none underline text-gray-800 cursor-pointer">
+                        <a href="http://localhost:3000/SignUpForm" tabIndex={0} role="link" aria-label="Registrate acá" className="text-sm font-medium leading-none underline text-gray-800 cursor-pointer">
                             {" "}
                             Registrate acá
-                        </span>
+                        </a>
                     </p>
                     <button aria-label="Continuar con Google" role="button" className="focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-10">
                         <svg width={19} height={20} viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">

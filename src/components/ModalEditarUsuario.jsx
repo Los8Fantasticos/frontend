@@ -37,6 +37,7 @@ export default function EditarUsuarioDialog({ show, close, usuario, onSave }) {
   usuarioEditado.id = usuario.id;
   usuarioEditado.Email = usuario.email;
   async function editarUser(usuario, left) {
+    debugger;
     await userServices.editUser(usuario);
     await userManagementServices.assignRolesToUser(usuario.id, left);
   }

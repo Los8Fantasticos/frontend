@@ -5,7 +5,7 @@ export const userServices = {
     getById,
     createUser,
     deleteUser,
-    editUser
+    editUser,
   };
 
 /**
@@ -37,5 +37,6 @@ async function deleteUser(data) {
  * @param {*} data
  */
  async function editUser(data) {
+    debugger;
     return callApi(service, "PUT", data);
 }

@@ -75,7 +75,7 @@ export function Privilegios() {
                   userManagementServices.deletePrivilege(id).then(() => {
                     Swal.fire('Se eliminó el privilegio correctamente!', '', 'success')
                     .then(() => {
-                      window.location.reload();
+                      getPrivileges();
                     })
                 }).catch((result2) => {
                     Swal.fire(result2.detail, '', 'error')
